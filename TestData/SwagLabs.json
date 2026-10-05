@@ -1,0 +1,15 @@
+
+{
+    "data1":{
+        "userId":"standard_user",
+        "passforword":"secret_sauce"
+    },
+    "data2":{
+        "userId":"locked_out_user",
+        "passforword":"secret_sauce"
+    },
+    "data3":{
+        "userId":"problem_user",
+        "passforword":"secret_sauce"
+    }
+}

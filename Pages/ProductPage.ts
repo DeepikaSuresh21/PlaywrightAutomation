@@ -20,18 +20,18 @@ export class ProductPage{
    constructor(page:Page){
     this.page =page;
     this.Backpack = page.locator("//div[text()='Sauce Labs Backpack']");
-    this.BackpackCart = page.locator("(//button[text()='Add to cart'])[1]")
+    this.BackpackCart = page.locator("[data-test='add-to-cart-sauce-labs-backpack']");
     this.BikeLight = page.locator("//div[text()='Sauce Labs Bike Light']");
-    this.BikeLightCart = page.locator("(//button[text()='Add to cart'])[2]")
+    this.BikeLightCart = page.locator("[data-test='add-to-cart-sauce-labs-bike-light']");
     this.SauceLabs = page.locator("//div[text()='Sauce Labs Bolt T-Shirt']");
-    this.SaucelabsCart = page.locator("(//button[text()='Add to cart'])[3]")
+    this.SaucelabsCart = page.locator("[data-test='add-to-cart-sauce-labs-bolt-t-shirt']");
     this. FleeJacket = page.locator("//div[text()='Sauce Labs Fleece Jacket']");
-    this.FleeJacketCart = page.locator("(//button[text()='Add to cart'])[4]")
+    this.FleeJacketCart = page.locator("[data-test='add-to-cart-sauce-labs-fleece-jacket']");
     this. Onesie = page.locator("//div[text()='Sauce Labs Onesie']");
-    this.OnesieCart = page.locator("(//button[text()='Add to cart'])[5]")
+    this.OnesieCart = page.locator("[data-test='add-to-cart-sauce-labs-onesie']");
     this.allTheThings = page.locator("//div[text()='Test.allTheThings() T-Shirt (Red)']");
-    this.allTheThingsCart = page.locator("(//button[text()='Add to cart'])[6]")
-    this.MainCart = page.locator('//a[@data-test="shopping-cart-link"]')
+    this.allTheThingsCart = page.locator("[data-test='add-to-cart-test.allthethings-(red)']");
+    this.MainCart = page.locator('[data-test="shopping-cart-link"]');
 }
 
    async BuyBackpackCart(){
@@ -55,9 +55,9 @@ export class ProductPage{
 
 
    async CompleteproductPage(){
-    this.BuyBackpackCart();
-    this.BuyBikeLightCart();
-    this.clickMainCart();
+    await this.BuyBackpackCart();
+    await this.BuyBikeLightCart();
+    await this.clickMainCart();
    }
 }
 

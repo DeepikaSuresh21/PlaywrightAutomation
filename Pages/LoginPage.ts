@@ -11,13 +11,13 @@ export class LoginPage{
     readonly errorCheck: Locator;
 
    constructor(page:Page){
-    this.page =page;
+    this.page = page;
     this.username = page.locator("//input[@data-test='username']");
     this.password = page.locator("//input[@data-test='password']");
     this.loginButton = page.locator("//input[@data-test='login-button']");
     this.swagLabsText = page.locator("//div[normalize-space()='Swag Labs']");
     this.userNameFieldText = page.locator("//h4[normalize-space()='Accepted usernames are:']");
-    this.errorCheck = page.locator("//h3[@data-test='error']")
+    this.errorCheck = page.locator("//h3[@data-test='error']");
    }
 
    async launchSwagWebApp(){
@@ -43,16 +43,14 @@ export class LoginPage{
 
    async errorVisibleCheck(){
    await this.hitLoginButton();
-   await expect(this.errorCheck).toBeVisible()
+   await expect(this.errorCheck).toBeVisible();
    }
 
    async completeLogin(usernameData:string, passwordData:string ){
     await this.launchSwagWebApp();
     await this.VerifyloginPageVisible();
-    await this.hitLoginButton();
-    await this.errorVisibleCheck();
     await this.enterUserNameAndPassword(usernameData, passwordData);
     await this.hitLoginButton();
-   }
+  }
 }
 

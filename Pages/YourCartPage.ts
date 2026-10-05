@@ -14,10 +14,10 @@ export class YourCartPage{
     this.page = page;
 
     this.cartTitle = page.locator("//span[text()='Your Cart']");
-    this.removeBackpack= page.locator("//button[@id='remove-sauce-labs-backpack']")
-    this.removeBikelight=page.locator("//button[@id='remove-sauce-labs-bike-light']")
-    this.checkoutButton = page.locator("//button[@id='checkout']");
-    this.continueShoppingButton = page.locator("//button[@id='continue-shopping']");
+    this.removeBackpack = page.locator('[data-test="remove-sauce-labs-backpack"]');
+    this.removeBikelight = page.locator('[data-test="remove-sauce-labs-bike-light"]');
+    this.checkoutButton = page.locator('[data-test="checkout"]');
+    this.continueShoppingButton = page.locator('[data-test="continue-shopping"]');
   }
   
   async verifythePage(){
@@ -37,8 +37,8 @@ async hitcheckOut(){
 }
 
 async CompleteYourCart(){
-  this.verifythePage();
-  this.ModifyCartItems();
-  this.hitcheckOut();
+  await this.verifythePage();
+  await this.ModifyCartItems();
+  await this.hitcheckOut();
 }
   }
