@@ -1,63 +1,51 @@
-import { test, expect } from "@playwright/test"
-import { LoginPage } from "../Pages/LoginPage"
-import { ProductPage } from "../Pages/ProductPage"
-import { YourCartPage } from "../Pages/YourCartPage"
-import { CheckOutPage } from "../Pages/CheckOutPage"
-import { CheckoutCompletePage } from "../Pages/CheckoutCompletePage"
-//const testData = require("../TestData/SwagLabs.json")
-//import { testData } from "../TestData/SwagLabs.json"
-import swagLabsData from '../TestData/SwagLabs.json'
+import { test, expect } from '@playwright/test';
+import { LoginPage } from "../Pages/LoginPage";
+import {ProductPage} from "../Pages/ProductPage";
+import {YourCartPage} from '../Pages/YourCartPage';
+import {CheckOutPage} from '../Pages/CheckOutPage';
+import {OverviewPage} from '../Pages/OverviewPage';
+import {CheckoutCompletePage} from '../Pages/CheckoutCompletePage';
+import path from 'path';
+import ExcelUtils from '../Utils/excelUtils';
+
+const filePath = path.resolve(__dirname, '../TestData/sauceData.xlsx');
+
+const excelUtils = new ExcelUtils(filePath);
+
+const loginSheetName = 'Sheet1';
+const loginData = excelUtils.getSheetData(loginSheetName);
+
+const currentFileName = path.basename(__filename, '.spec.ts');
+const matchingRow = excelUtils.findRowByTCID(loginData, currentFileName);
+
+if (!matchingRow) {
+  throw new Error(`Test case ID ${currentFileName} does not match any TC_ID in the data.`);
+}
+
+const { Username,Password } = matchingRow;
+
+test("Complete Project",async({page},testinfo)=>{
 
 
-test("Swaglab labs flow In POM", async ({ page }, testInfo) => {
+const loginPage = new LoginPage(page);
+const productPage = new ProductPage(page);
+const yourCart = new YourCartPage(page);
+const checkoutPage = new CheckOutPage(page);
+const overviewPage = new OverviewPage(page);
+const checkoutCompletepage = new CheckoutCompletePage(page);
 
-    const loginPage = new LoginPage(page);
-    const productpage = new ProductPage(page);
-    const yourcartpage = new YourCartPage(page);
-    const checkoutpage = new CheckOutPage(page);
-    const checkoutcompletepage = new CheckoutCompletePage(page);
+await page.goto('https://www.saucedemo.com/');
 
-    await page.goto("https://www.saucedemo.com/");
+await test.step('Login to the application', async () => {
+await loginPage.completeLogin('standard_user','secret_sauce');
+await page.screenshot({ path: 'screenshot1.png' });
+});
 
-    let step = 1
-    let stepNo=1
-    await test.step(`STEP ${step++}- Enter username and password`, async () => {
-    await loginPage.enterUserNameAndPassword(swagLabsData.data1.userId, swagLabsData.data1.passforword);
-    const screenshot = await page.screenshot();
-    await testInfo.attach(`STEP ${stepNo++}- Enter username and password`, {body: screenshot,contentType: "image/png",});
-  });
-
-    await test.step(`STEP ${step++}-Click Login`, async () => {
-        await loginPage.hitLoginButton();
-        const screenshot = await page.screenshot();
-        await testInfo.attach(`STEP ${stepNo++}-Click login`, { body: screenshot, contentType: 'image/png' });
-    });
-
-    await test.step(`STEP ${step++}- Click Add to cart`, async () => {
-        await productpage.BuyBackpackCart();
-        const screenshot = await page.screenshot();
-        await testInfo.attach(`STEP ${stepNo++}- Click Add to cart`, { body: screenshot, contentType: 'image/png' });
-    });
-    await test.step(`STEP ${step++}- Click Shopping cart`, async () => {
-        await productpage.clickMainCart();
-        const screenshot = await page.screenshot();
-        await testInfo.attach(`STEP ${stepNo++}- Click Shopping cart`, { body: screenshot, contentType: 'image/png' });
-    });
-    await test.step(`STEP ${step++}- Click Checkout`, async () => {
-        await yourcartpage.hitcheckOut();
-        const screenshot = await page.screenshot();
-        await testInfo.attach(`STEP ${stepNo++}- Click Checkout`, { body: screenshot, contentType: 'image/png' });
-    });
-
-    await test.step(`STEP ${step++}-Enter firstname,last name,postal code`, async () => {
-        await checkoutpage.fillCheckoutInformation("deepika", "suresh", "D15WE02");
-        const screenshot = await page.screenshot();
-        await testInfo.attach(`STEP ${stepNo++}-Enter firstname,last name,postal code `, { body: screenshot, contentType: 'image/png' });
-    });
-        await test.step(`STEP ${step++}- Click continue`, async () => {
-        await checkoutpage.hitContinue();
-        const screenshot = await page.screenshot();
-        await testInfo.attach(`STEP ${stepNo++}- Click continue`, { body: screenshot, contentType: 'image/png' });
-    });
-
+await productPage.CompleteproductPage();
+await page.screenshot({ path: 'screenshot.png' });
+await page.click('.shopping_cart_link');
+await yourCart.CompleteYourCart();
+await checkoutPage .CompleteCheckoutStepOne("Deepika","Suresh","D15WE02");
+await overviewPage.CompleteCheckoutOverview();
+await checkoutCompletepage.CompleteOrderConfirmation();
 });

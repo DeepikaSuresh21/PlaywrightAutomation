@@ -5,6 +5,24 @@ import {YourCartPage} from '../Pages/YourCartPage';
 import {CheckOutPage} from '../Pages/CheckOutPage';
 import {OverviewPage} from '../Pages/OverviewPage';
 import {CheckoutCompletePage} from '../Pages/CheckoutCompletePage';
+import path from 'path';
+import ExcelUtils from '../Utils/excelUtils';
+
+const filePath = path.resolve(__dirname, '../testData/saucedemotestdata.xlsx');
+
+const excelUtils = new ExcelUtils(filePath);
+
+const loginSheetName = 'DataAA';
+const loginData = excelUtils.getSheetData(loginSheetName);
+
+const currentFileName = path.basename(__filename, '.spec.ts');
+const matchingRow = excelUtils.findRowByTCID(loginData, currentFileName);
+
+if (!matchingRow) {
+  throw new Error(`Test case ID ${currentFileName} does not match any TC_ID in the data.`);
+}
+
+const { User_Name, Password, First_Name, Last_Name, Postal_Code } = matchingRow;
 
 test("Complete Project",async({page},testinfo)=>{
 
